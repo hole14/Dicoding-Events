@@ -52,6 +52,12 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    //navigation
+    implementation(libs.androidx.navigation.compose)
+
+    //icon
+    implementation(libs.androidx.material.icons.extended)
+
     //viewModel liveData
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
@@ -66,6 +72,7 @@ dependencies {
     //room
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.material3)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
