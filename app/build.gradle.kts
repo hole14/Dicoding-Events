@@ -58,6 +58,9 @@ dependencies {
     //icon
     implementation(libs.androidx.material.icons.extended)
 
+    //image
+    implementation(libs.coil.compose)
+
     //viewModel liveData
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
@@ -73,6 +76,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     implementation(libs.material3)
+    implementation(libs.androidx.foundation.layout)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)

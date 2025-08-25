@@ -11,7 +11,7 @@ import com.example.dicodingevent.data.entity.EventEntity
 
 @Database(entities = [EventEntity::class], version = 2, exportSchema = false)
 abstract class EventDatabase: RoomDatabase() {
-    abstract fun eventDao(): EventDao
+    abstract fun eventDao():EventDao
     companion object{
         @Volatile
         private var instance: EventDatabase? = null
@@ -19,10 +19,10 @@ abstract class EventDatabase: RoomDatabase() {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE event ADD COLUMN active INTEGER NOT NULL DEFAULT 1")
             }
-        }
 
+        }
         fun getInstance(context: Context): EventDatabase =
-            instance ?: synchronized(this){
+            instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     EventDatabase::class.java,

@@ -9,6 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "event")
 data class EventEntity (
+
     @field:ColumnInfo(name = "id")
     @field:PrimaryKey
     val id: Int,
@@ -56,4 +57,5 @@ data class EventEntity (
     var isFavorite: Boolean = false,
 
     val active: Int
+
 ): Parcelable

@@ -17,8 +17,8 @@ class EventRepository private constructor(
     fun getUpcomingEvents(): LiveData<Result<List<EventEntity>>> = liveData(Dispatchers.IO) {
         emit(Result.Loading)
         try {
-            val response = apiService.getUpcomingEvents(1)
-            val listEvent = response.listEvents
+            val respone = apiService.getUpcomingEvents(1)
+            val listEvent = respone.listEvents
             val eventList = listEvent?.map { event ->
                 EventEntity(
                     event?.id!!,
@@ -41,7 +41,7 @@ class EventRepository private constructor(
             }
             eventList?.let { eventDao.insertEvent(it) }
         } catch (e: Exception) {
-            Log.d("Event Repository", "Get Upcoming Event: ${e.message.toString()}")
+            Log.d("EventRepository", "getUpcomingEvents: ${e.message.toString()} ")
             emit(Result.Error(e.message.toString()))
         }
         val localData: LiveData<Result<List<EventEntity>>> = eventDao.getUpcomingEvents().map { Result.Success(it) }
@@ -81,9 +81,10 @@ class EventRepository private constructor(
         val localData: LiveData<Result<List<EventEntity>>> = eventDao.getFinishedEvents().map { Result.Success(it) }
         emitSource(localData)
     }
-    suspend fun searchEvent(query: String): List<EventEntity> {
+    suspend fun searchEvents(query: String): List<EventEntity>{
         return eventDao.getSearchEvent(query)
     }
+
     fun getFavoriteEvents() = eventDao.getFavoriteEvents()
 
     suspend fun toggleFavorite(event: EventEntity) {

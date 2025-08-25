@@ -4,7 +4,8 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-data class EventResponse (
+data class EventsResponse(
+
     @field:SerializedName("listEvents")
     val listEvents: List<ListEventsItem?>? = null,
 

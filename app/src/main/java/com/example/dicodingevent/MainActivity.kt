@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -27,7 +26,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.dicodingevent.navigation.BottomNavItem
 import com.example.dicodingevent.screens.FavoriteScreen
 import com.example.dicodingevent.screens.FinishedScreen
-import com.example.dicodingevent.screens.SettingScreen
 import com.example.dicodingevent.screens.UpcomingScreen
 import com.example.dicodingevent.ui.theme.DicodingEventTheme
 
@@ -58,7 +56,6 @@ fun MainScreen(){
                     BottomNavItem.Upcoming,
                     BottomNavItem.Finished,
                     BottomNavItem.Favorite,
-                    BottomNavItem.Setting
                 )
 
                 items.forEach { item ->
@@ -110,9 +107,6 @@ fun MainScreen(){
             }
             composable(BottomNavItem.Favorite.route){
                 FavoriteScreen()
-            }
-            composable(BottomNavItem.Setting.route){
-                SettingScreen()
             }
         }
     }
