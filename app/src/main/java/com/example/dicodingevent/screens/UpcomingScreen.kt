@@ -43,6 +43,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpcomingScreen(
+    onEventClick: (Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -88,7 +89,7 @@ fun UpcomingScreen(
             items(upcomingEvents) { event ->
                 EventCard(
                     event = event,
-                    onClick = { /* Handle click */ }
+                    onClick = { onEventClick(event.id) }
                 )
             }
         }

@@ -19,11 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.dicodingevent.navigation.BottomNavItem
+import com.example.dicodingevent.screens.DetailScreen
 import com.example.dicodingevent.screens.FavoriteScreen
 import com.example.dicodingevent.screens.FinishedScreen
 import com.example.dicodingevent.screens.UpcomingScreen
@@ -44,7 +47,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(){
     val navController = rememberNavController()
-
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    val showBottomNav = currentRoute in listOf(
+        BottomNavItem.Upcoming.route,
+        BottomNavItem.Finished.route,
+        BottomNavItem.Favorite.route
+    )
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -97,16 +106,41 @@ fun MainScreen(){
         NavHost(
             navController = navController,
             startDestination = BottomNavItem.Upcoming.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = if (showBottomNav) Modifier.padding(innerPadding) else Modifier
         ) {
             composable(BottomNavItem.Upcoming.route) {
-                UpcomingScreen()
+                UpcomingScreen(
+                    onEventClick = { eventId ->
+                        navController.navigate("detail/$eventId")
+                    }
+                )
             }
             composable(BottomNavItem.Finished.route){
-                FinishedScreen()
+                FinishedScreen(
+                    onEventClick = { eventId ->
+                        navController.navigate("detail/$eventId")
+                    }
+                )
             }
             composable(BottomNavItem.Favorite.route){
-                FavoriteScreen()
+                FavoriteScreen(
+                    onEventClick = { eventId ->
+                        navController.navigate("detail/$eventId")
+                    }
+                )
+            }
+            composable(
+                route = "detail/{eventId}",
+                arguments = listOf(navArgument("eventId"){ type = NavType.IntType })
+            ) { backStackEntry ->
+                val eventId = backStackEntry.arguments?.getInt("eventId") ?: 0
+                DetailScreen(
+                    eventId = eventId,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+
             }
         }
     }

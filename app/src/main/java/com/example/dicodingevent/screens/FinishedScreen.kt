@@ -52,7 +52,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FinishedScreen(modifier: Modifier = Modifier) {
+fun FinishedScreen(onClickEvent: (Int) -> Unit = {},modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val viewModel: EventViewModel = viewModel(
         factory = EventViewModelFactory.getInstance(context)
@@ -136,7 +136,7 @@ fun FinishedScreen(modifier: Modifier = Modifier) {
             ) { event ->
                 FinishedEventCard(
                     event = event,
-                    onClick = { /* Handle click */ }
+                    onClick = { onClickEvent(event.id) }
                 )
             }
         }
