@@ -23,4 +23,20 @@ class EventViewModel(private val eventRepository: EventRepository) : ViewModel()
             _query.postValue(result)
         }
     }
+
+    fun clearSearch () {
+        _query.value = emptyList()
+    }
+
+    fun getFavoriteEvents(): LiveData<List<EventEntity>> {
+        return eventRepository.getFavoriteEvents()
+    }
+
+    suspend fun toggleFavorite(event: EventEntity) {
+        eventRepository.toggleFavorite(event)
+    }
+
+    fun getEventById(eventId: Int): LiveData<EventEntity> {
+        return eventRepository.getEventById(eventId)
+    }
 }

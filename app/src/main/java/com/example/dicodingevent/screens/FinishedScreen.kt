@@ -1,5 +1,6 @@
 package com.example.dicodingevent.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,18 +8,19 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -52,7 +54,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FinishedScreen(onClickEvent: (Int) -> Unit = {},modifier: Modifier = Modifier) {
+fun FinishedScreen(onClickEvent: (Int) -> Unit = {}, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val viewModel: EventViewModel = viewModel(
         factory = EventViewModelFactory.getInstance(context)
@@ -61,7 +63,6 @@ fun FinishedScreen(onClickEvent: (Int) -> Unit = {},modifier: Modifier = Modifie
     val finishedEventsResult by viewModel.getFinishedEvents.observeAsState(Result.Loading)
 
     var searchQuery by remember { mutableStateOf("") }
-    val searchResult by viewModel.query.observeAsState(emptyList())
 
     val finishedEvents = when (finishedEventsResult) {
         is Result.Success -> (finishedEventsResult as Result.Success<List<EventEntity>>).data
@@ -69,7 +70,13 @@ fun FinishedScreen(onClickEvent: (Int) -> Unit = {},modifier: Modifier = Modifie
         is Result.Error -> emptyList()
     }
 
-    val display = if (searchQuery.isNotEmpty()) searchResult else finishedEvents
+    val displayEvents = if (searchQuery.isNotEmpty()) {
+        finishedEvents.filter { event ->
+            event.name.contains(searchQuery, ignoreCase = true)
+        }
+    } else {
+        finishedEvents
+    }
 
     Column(
             modifier = modifier
@@ -114,13 +121,32 @@ fun FinishedScreen(onClickEvent: (Int) -> Unit = {},modifier: Modifier = Modifie
                         contentDescription = "Search"
                     )
                 },
+                trailingIcon = {
+                    if (searchQuery.isNotEmpty()) {
+                        IconButton(
+                            onClick = {
+                                searchQuery = ""
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Clear,
+                                contentDescription = "Clear search",
+                                tint = Color.Gray
+                            )
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF1976D2),
-                    unfocusedBorderColor = Color.Gray
+                    unfocusedBorderColor = Color.Gray,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.Black
+
                 )
             )
         }
@@ -131,7 +157,7 @@ fun FinishedScreen(onClickEvent: (Int) -> Unit = {},modifier: Modifier = Modifie
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(
-                items = display,
+                items = displayEvents,
                 key = { event -> event.id }
             ) { event ->
                 FinishedEventCard(
