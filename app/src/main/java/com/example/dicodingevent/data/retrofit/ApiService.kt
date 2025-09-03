@@ -10,8 +10,4 @@ interface ApiService {
 
     @GET("events")
     suspend fun getFinishedEvents(@Query("active") active: Int): EventsResponse
-
-    @GET("events?active=-1&limit=1")
-    suspend fun getLatestEvent(): EventsResponse
-
 }

@@ -27,4 +27,9 @@ sealed class BottomNavItem (
         title = "Favorite",
         icon = Icons.Default.Favorite
     )
+    object Setting: BottomNavItem(
+        route = "setting",
+        title = "Setting",
+        icon = Icons.Default.Settings
+    )
 }

@@ -31,4 +31,10 @@ interface EventDao {
     @Query("SELECT * FROM event WHERE id = :eventId LIMIT 1")
     fun getEventById(eventId: Int): LiveData<EventEntity>
 
+    @Query("SELECT * FROM event WHERE id = :eventId LIMIT 1")
+    fun getEventByIdSync(eventId: Int) : EventEntity?
+
+    @Query("SELECT * FROM event WHERE active = 1 order by datetime(beginTime) asc")
+    suspend fun getUpcomingEventsSync(): List<EventEntity>
+
 }
